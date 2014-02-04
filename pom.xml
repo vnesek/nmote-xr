@@ -6,6 +6,29 @@
 	<version>2.0.0</version>
 	<packaging>jar</packaging>
 	<name>nmote-xr</name>
+	<description>XML-RPC client server library</description>
+	<url>https://github.com/vnesek/nmote-xr</url>
+
+	<licenses>
+		<license>
+			<name>BSD-style</name>
+			<url>http://www.opensource.org/licenses/bsd-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/vnesek/nmote-xr.git</url>
+		<connection>scm:git:git://github.com/vnesek/nmote-xr.git</connection>
+	</scm>
+
+	<developers>
+		<developer>
+			<id>vnesek</id>
+			<name>Vjekoslav Nesek</name>
+			<url>https://github.com/vnesek</url>
+		</developer>
+	</developers>
 
 	<prerequisites>
 		<maven>3.0</maven>
@@ -13,12 +36,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<javax.annotation-api.version>1.2</javax.annotation-api.version>
 		<javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 		<junit.version>4.11</junit.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<spring.version>4.0.1.RELEASE</spring.version>
-   	</properties>
+	</properties>
 
 	<dependencies>
 		<dependency>
