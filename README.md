@@ -66,7 +66,7 @@ Usage
 	}
 ```
 
-* For production you will need to expose `com.nmote.xr.Endpoint' via one or  more 
+* For production you will need to expose `com.nmote.xr.Endpoint` via one or  more 
   `com.nmote.xr.XRServlet` instances. Endpoints are passed in a servlet context.
   (See the source for more info)
   
