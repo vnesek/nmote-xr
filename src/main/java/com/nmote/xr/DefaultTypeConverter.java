@@ -56,7 +56,7 @@ public class DefaultTypeConverter implements TypeConverter {
 			// Type elementType = type instanceof ParameterizedType ? ((ParameterizedType) type).getActualTypeArguments()[0] : Object.class;
 			Collection result = newCollection((Collection) value);
 			for (Object e : (Collection) value) {
-				result.add(converter.toXmlRpcValue(e, type, converter));
+				result.add(converter.toXmlRpcValue(e, e.getClass(), converter));
 			}
 			value = result;
 		} else if (value instanceof Map) {
