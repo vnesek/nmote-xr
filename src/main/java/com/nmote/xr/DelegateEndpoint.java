@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -13,7 +13,7 @@ public class DelegateEndpoint implements Endpoint {
 	}
 
 	public MethodResponse call(MethodCall call) {
-		return target.call(call);
+		return getTarget().call(call);
 	}
 
 	public Endpoint getTarget() {
