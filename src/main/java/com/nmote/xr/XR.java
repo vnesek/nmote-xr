@@ -68,7 +68,7 @@ public final class XR {
 			endpoint.export(server, i);
 		}
 		endpoint.exportMeta();
-		return server(new ObjectEndpoint().export(server, clazz).exportMeta());
+		return server(endpoint);
 	}
 
 	private XR() {
