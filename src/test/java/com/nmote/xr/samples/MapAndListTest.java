@@ -15,16 +15,15 @@
  */
 package com.nmote.xr.samples;
 
-import com.nmote.nanohttp.NanoServer;
-import com.nmote.xr.XR;
-import com.nmote.xr.XRMethod;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.nmote.nanohttp.NanoServer;
+import com.nmote.xr.XR;
+import com.nmote.xr.XRMethod;
 
 /**
  *
@@ -40,7 +39,6 @@ public class MapAndListTest {
 
     public static class ListTestServer implements ListTestServerInterface {
 
-        @Override
         public String concatenate(List<String> texts) {
             String result = "";
 
@@ -51,7 +49,7 @@ public class MapAndListTest {
             return result;
         }
     }
-    
+
     private static <T> void assertEquals(T expected, T actual) throws Exception
     {
         if (!expected.equals(actual))
@@ -88,7 +86,6 @@ public class MapAndListTest {
 
     public static class MapTestServer implements MapTestServerInterface {
 
-        @Override
         public String getFromMap(Map<String, String> texts, String key) {
             return texts.get(key);
         }
@@ -121,7 +118,6 @@ public class MapAndListTest {
 
     public static class MapOfListsTestServer implements MapOfListsTestServerInterface {
 
-        @Override
         public String concatenateOne(Map<String, List<String>> texts, String key) {
             String result = "";
 
@@ -168,7 +164,6 @@ public class MapAndListTest {
 
     public static class ListsOfMapsTestServer implements ListsOfMapsTestServerInterface {
 
-        @Override
         public String concatenateOne(List<Map<String, String>> texts, String key) {
             String result = "";
 
@@ -208,7 +203,7 @@ public class MapAndListTest {
             nanoServer.stop();
         }
     }
-    
+
     public static void main(String[] args) throws Exception {
         testList();
         testMap();
