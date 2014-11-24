@@ -1,11 +1,10 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
 package com.nmote.xr;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -29,7 +28,7 @@ public class XRServlet extends HttpServlet {
 
 	private static final Logger LOG = LoggerFactory.getLogger(XRServlet.class);
 
-	private static final long serialVersionUID = -5739181478381832593L;
+	private static final long serialVersionUID = About.serialVersionUID;
 	private static final String TEXT_XML = "text/xml"; //$NON-NLS-1$
 
 	@Override
@@ -46,8 +45,9 @@ public class XRServlet extends HttpServlet {
 			IOException {
 
 		Endpoint endpoint = (Endpoint) getServletContext().getAttribute(endpointKey);
-		if (endpoint == null)
-			throw new ServletException("no Endpoint found in a servlet context with name:" + endpointKey); //$NON-NLS-1$ 
+		if (endpoint == null) {
+			throw new ServletException("no Endpoint found in a servlet context with name:" + endpointKey); //$NON-NLS-1$
+		}
 
 		MethodResponse result;
 		if (TEXT_XML.equals(request.getContentType())) {
@@ -66,14 +66,14 @@ public class XRServlet extends HttpServlet {
 			result = new MethodResponse(Fault.newSystemFault(1013, request.getContentType()));
 		}
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		XmlRpcWriter xrw = new XmlRpcWriter(new OutputStreamWriter(baos, "utf-8")); //$NON-NLS-1$
-		xrw.writeMethodResponse(result);
-		xrw.close();
 		response.setContentType(TEXT_XML);
-		response.setContentLength(baos.size());
 		OutputStream out = response.getOutputStream();
-		baos.writeTo(out);
+		XmlRpcWriter xrw = new XmlRpcWriter(new OutputStreamWriter(out, "UTF-8")); //$NON-NLS-1$
+		try {
+			xrw.writeMethodResponse(result);
+		} finally {
+			xrw.close();
+		}
 		out.close();
 	}
 
