@@ -59,7 +59,7 @@ class LoggingStreamSupport {
 		// Append to plain text dump
 		if (plainTextDump != null) {
 			char c = (char) b;
-			if (!Character.isLetterOrDigit(c)) {
+			if (c < 32 || c > 127) {
 				c = '.';
 			}
 			plainTextDump.append(c);
