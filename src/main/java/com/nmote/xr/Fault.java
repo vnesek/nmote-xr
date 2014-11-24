@@ -27,7 +27,7 @@ public class Fault extends RuntimeException {
 
 	private static final String BUNDLE_NAME = "com.nmote.xr.faults"; //$NON-NLS-1$
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
-	private static final long serialVersionUID = -6930477950254905247L;
+	private static final long serialVersionUID = About.serialVersionUID;
 
 	public Fault(int faultCode) {
 		this(faultCode, "");
