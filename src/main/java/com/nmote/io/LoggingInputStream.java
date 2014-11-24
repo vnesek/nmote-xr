@@ -54,7 +54,6 @@ public class LoggingInputStream extends FilterInputStream {
 		return r;
 	}
 
-	@Override
 	public synchronized int read(byte[] b, int off, int len) throws IOException {
 		int r = super.read(b, off, len);
 		if (r != -1) {
