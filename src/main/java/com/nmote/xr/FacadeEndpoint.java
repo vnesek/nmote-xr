@@ -7,9 +7,28 @@ package com.nmote.xr;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 
 public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHandler {
+
+	@SuppressWarnings("unchecked")
+	public static <T> FacadeEndpoint<T> getProxy(Object proxy) {
+		return (FacadeEndpoint<T>) Proxy.getInvocationHandler(proxy);
+	}
+
+	private static int countXRMethods(Class<?>... interfaces) {
+		int count = 0;
+		for (int i = 0; i < interfaces.length; ++i) {
+			Method[] methods = interfaces[i].getMethods();
+			for (int j = 0; j < methods.length; ++j) {
+				if (methods[j].getAnnotation(XRMethod.class) != null) {
+					++count;
+				}
+			}
+		}
+		return count;
+	}
 
 	public FacadeEndpoint(Endpoint endpoint, Class<T> clazz, Class<?>... additionalInterfaces) {
 		this(endpoint, clazz.getClassLoader(), clazz, DefaultTypeConverter.getInstance(), additionalInterfaces);
@@ -33,17 +52,17 @@ public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHan
 		this.exportInterfaces = new Class<?>[additionalInterfaces.length + 1];
 		System.arraycopy(additionalInterfaces, 0, exportInterfaces, 0, additionalInterfaces.length);
 		exportInterfaces[additionalInterfaces.length] = clazz;
-	}
 
-	public T newProxy() {
-		Object proxy = java.lang.reflect.Proxy.newProxyInstance(classLoader, exportInterfaces, this);
-		return clazz.cast(proxy);
+		// Check for @XRMethod annotated methods, there should be at least one
+		if (countXRMethods(exportInterfaces) == 0) {
+			throw new RuntimeException("no methods annotated with " + XRMethod.class + " found on " + clazz);
+		}
 	}
 
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		XRMethod xrm = method.getAnnotation(XRMethod.class);
 		if (xrm == null) {
-			throw new Error("only calls to method annotated with " + XRMethod.class + " are permitted");
+			throw new RuntimeException("only calls to method annotated with " + XRMethod.class + " are permitted");
 		}
 		String name = xrm.value();
 		if (XRMethod.METHOD_NAME.equals(name)) {
@@ -75,13 +94,13 @@ public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHan
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> FacadeEndpoint<T> getProxy(Object proxy) {
-		return (FacadeEndpoint<T>) java.lang.reflect.Proxy.getInvocationHandler(proxy);
+	public T newProxy() {
+		Object proxy = Proxy.newProxyInstance(classLoader, exportInterfaces, this);
+		return clazz.cast(proxy);
 	}
 
+	private final ClassLoader classLoader;
 	private final Class<T> clazz;
 	private final Class<?>[] exportInterfaces;
-	private final ClassLoader classLoader;
 	private final TypeConverter typeConverter;
 }
