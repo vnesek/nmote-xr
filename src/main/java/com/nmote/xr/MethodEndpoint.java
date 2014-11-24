@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -88,6 +88,8 @@ public class MethodEndpoint implements Meta {
 					result = new Fault(Fault.CUSTOM_FAULT, cause.toString());
 				}
 			}
+		} catch (InstantiationException e) {
+			result = Fault.newSystemFault(Fault.INSTANTIATION, e.getMessage());
 		}
 		return new MethodResponse(result);
 	}
@@ -130,7 +132,7 @@ public class MethodEndpoint implements Meta {
 	public boolean supports(String methodName) {
 		return this.methodName.equals(methodName);
 	}
-	
+
 	@Override
 	public String toString() {
 		return methodName + "/" + method;

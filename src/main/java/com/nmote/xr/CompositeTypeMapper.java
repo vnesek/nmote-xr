@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -21,7 +21,7 @@ public class CompositeTypeMapper implements TypeConverter {
 		this(Arrays.asList(faultMappers));
 	}
 
-	public Object toJavaObject(Object value, Type type, TypeConverter converter, Annotation... annotations) {
+	public Object toJavaObject(Object value, Type type, TypeConverter converter, Annotation... annotations) throws InstantiationException, IllegalAccessException {
 		Object result = null;
 		for (TypeConverter typeConverter : typeConverters) {
 			result = typeConverter.toJavaObject(value, type, converter, annotations);
@@ -30,7 +30,8 @@ public class CompositeTypeMapper implements TypeConverter {
 		return result;
 	}
 
-	public Object toXmlRpcValue(Object object, Type type, TypeConverter converter, Annotation... annotations) {
+	public Object toXmlRpcValue(Object object, Type type, TypeConverter converter, Annotation... annotations)
+			throws InstantiationException, IllegalAccessException {
 		Object result = null;
 		for (TypeConverter typeConverter : typeConverters) {
 			result = typeConverter.toXmlRpcValue(object, type, converter, annotations);

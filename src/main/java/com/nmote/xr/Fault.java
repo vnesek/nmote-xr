@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -23,6 +23,7 @@ public class Fault extends RuntimeException {
 	public static final int METHOD_NOT_SUPPORTED = 1004;
 	public static final int SERVER_ERROR = 1011;
 	public static final int SERVER_INITIALIZATION = 1015;
+	public static final int INSTANTIATION = 1017;
 
 	private static final String BUNDLE_NAME = "com.nmote.xr.faults"; //$NON-NLS-1$
 	private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
