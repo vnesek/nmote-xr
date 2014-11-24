@@ -9,7 +9,7 @@ Features
 * Supports Java 1.5+
 * Reflective and programmable calls
 * Basic springframework integration
-* No external dependecies at all
+* No external dependencies at all
 * Server and client support
 * BSD style license
 
@@ -101,7 +101,7 @@ Usage
 		}
 ```
 
-  (See the XRServlet.java source for more info)
+  (See the https://github.com/vnesek/nmote-xr/blob/master/src/main/java/com/nmote/xr/XRServlet.java source for more info)
 
 * Package `com.nmote.xr.spring` has support classes for exposing clients and
   server using springframework contexts.
