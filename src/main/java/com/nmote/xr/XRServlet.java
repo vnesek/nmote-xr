@@ -16,8 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 // TODO GET method should return xhtml with a list of methods and method help
@@ -25,8 +23,6 @@ import org.xml.sax.SAXException;
 public class XRServlet extends HttpServlet {
 
 	public static final String ENDPOINT_KEY = "com.nmote.xr.Endpoint"; //$NON-NLS-1$
-
-	private static final Logger LOG = LoggerFactory.getLogger(XRServlet.class);
 
 	private static final long serialVersionUID = About.serialVersionUID;
 	private static final String TEXT_XML = "text/xml"; //$NON-NLS-1$
@@ -85,17 +81,6 @@ public class XRServlet extends HttpServlet {
 			}
 		}
 		return endpoint;
-	}
-
-	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		long started = System.currentTimeMillis();
-		try {
-			super.service(req, resp);
-		} finally {
-			long elapsed = System.currentTimeMillis() - started;
-			LOG.debug("Elapsed " + elapsed + " ms");
-		}
 	}
 
 	protected String endpointKey;

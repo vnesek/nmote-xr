@@ -1,30 +1,30 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
 package com.nmote.io;
 
-import org.slf4j.Logger;
+import java.io.IOException;
 
 /**
  * Support class for formatting hex dumps of input and output streams. Builds a
  * hex dump and plain text representation and periodically dumps it to a
  * supplied log.
- * 
+ *
  * @author Vjekoslav Nesek vnesek@nmote.com
  */
 class LoggingStreamSupport {
 
-	public LoggingStreamSupport(Logger log, String prefix) {
+	public LoggingStreamSupport(Appendable log, String prefix) {
 		this(log, prefix, 16);
 	}
 
-	public LoggingStreamSupport(Logger log, String prefix, int size) {
+	public LoggingStreamSupport(Appendable log, String prefix, int size) {
 		this(log, prefix, size, true);
 	}
 
-	public LoggingStreamSupport(Logger log, String prefix, int size, boolean dumpPlainText) {
+	public LoggingStreamSupport(Appendable log, String prefix, int size, boolean dumpPlainText) {
 		if (log == null) {
 			throw new NullPointerException("log is null");
 		}
@@ -48,7 +48,7 @@ class LoggingStreamSupport {
 		pos = 0;
 	}
 
-	public void logByte(int b) {
+	public void logByte(int b) throws IOException {
 		if (atGroupEdge()) {
 			hexDump.append(' ');
 			plainTextDump.append(' ');
@@ -79,32 +79,28 @@ class LoggingStreamSupport {
 		return pos > 0 && (pos % groupSize) == 0;
 	}
 
-	public void close() {
+	public void close() throws IOException {
 		logDumps(false);
 	}
 
-	public void flush() {
+	public void flush() throws IOException {
 		logDumps(true);
 	}
 
-	private void logDumps(boolean flush) {
-		if (log.isDebugEnabled()) {
-			StringBuffer buffer = new StringBuffer(3 * size + 20);
-			buffer.append(prefix);
-			buffer.append(hexDump);
+	private void logDumps(boolean flush) throws IOException {
+			log.append(prefix);
+			log.append(hexDump);
 			if (plainTextDump != null) {
-				buffer.append(" | ");
-				buffer.append(plainTextDump);
+				log.append(" | ");
+				log.append(plainTextDump);
 			}
 			if (flush) {
-				buffer.append(" <flush>");
+				log.append(" <flush>");
 			}
-			log.debug(buffer.toString());
 			clear();
-		}
 	}
 
-	private final Logger log;
+	private final Appendable log;
 	private final StringBuffer hexDump;
 	private final StringBuffer plainTextDump;
 	private final String prefix;

@@ -9,7 +9,7 @@ Features
 * Supports Java 1.5+
 * Reflective and programmable calls
 * Basic springframework integration
-* No external dependecies other than slf4j-api
+* No external dependecies at all
 * Server and client support
 * BSD style license
 
