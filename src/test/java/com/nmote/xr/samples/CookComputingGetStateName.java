@@ -10,7 +10,8 @@ import com.nmote.xr.EndpointBuilder;
 public class CookComputingGetStateName {
 
 	public static void main(String[] args) throws Exception {
-		Math m = new EndpointBuilder().client("http://www.cookcomputing.com/xmlrpcsamples/math.rem", Math.class);
+		String url = "http://www.cookcomputing.com/xmlrpcsamples/math.rem";
+		Math m = new EndpointBuilder().debug().client(url, Math.class);
 		System.out.println(m.add(2, 3));
 	}
 }
