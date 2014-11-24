@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -33,7 +33,9 @@ public abstract class AbstractIOEndPoint extends XmlRpcParseSupport implements E
 				throw Fault.newSystemFault(1014, e);
 			} finally {
 				handler.clear();
-				in.close();
+				// Apparently SAX parser will close input stream so making
+				// following redundant:
+				// in.close();
 			}
 		} catch (IOException ioe) {
 			throw Fault.newSystemFault(1008, ioe);
