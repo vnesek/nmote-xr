@@ -1,11 +1,12 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
 package com.nmote.xr;
 
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
 public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHandler {
@@ -14,7 +15,8 @@ public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHan
 		this(endpoint, clazz.getClassLoader(), clazz, DefaultTypeConverter.getInstance(), additionalInterfaces);
 	}
 
-	public FacadeEndpoint(Endpoint endpoint, Class<T> clazz, TypeConverter typeConverter, Class<?>... additionalInterfaces) {
+	public FacadeEndpoint(Endpoint endpoint, Class<T> clazz, TypeConverter typeConverter,
+			Class<?>... additionalInterfaces) {
 		this(endpoint, clazz.getClassLoader(), clazz, typeConverter, additionalInterfaces);
 	}
 
@@ -22,7 +24,8 @@ public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHan
 		this(endpoint, clazz.getClassLoader(), clazz, DefaultTypeConverter.getInstance(), additionalInterfaces);
 	}
 
-	public FacadeEndpoint(Endpoint endpoint, ClassLoader classLoader, Class<T> clazz, TypeConverter typeConverter, Class<?>... additionalInterfaces) {
+	public FacadeEndpoint(Endpoint endpoint, ClassLoader classLoader, Class<T> clazz, TypeConverter typeConverter,
+			Class<?>... additionalInterfaces) {
 		super(endpoint);
 		this.clazz = clazz;
 		this.classLoader = classLoader;
@@ -37,10 +40,11 @@ public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHan
 		return clazz.cast(proxy);
 	}
 
-	public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws Throwable {
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		XRMethod xrm = method.getAnnotation(XRMethod.class);
-		if (xrm == null) { throw new IllegalAccessException("only calls to method annotated with " + XRMethod.class
-				+ " are permitted"); }
+		if (xrm == null) {
+			throw new Error("only calls to method annotated with " + XRMethod.class + " are permitted");
+		}
 		String name = xrm.value();
 		if (XRMethod.METHOD_NAME.equals(name)) {
 			name = method.getName();
@@ -64,7 +68,7 @@ public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHan
 			Fault fault = (Fault) response.getValue();
 			throw new Fault(fault.getFaultCode(), fault.getFaultString());
 		}
-		Object result =  response.getValue();
+		Object result = response.getValue();
 
 		// Convert result;
 		result = typeConverter.toJavaObject(result, returnType, typeConverter);
