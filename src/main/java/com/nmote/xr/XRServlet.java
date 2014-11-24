@@ -44,14 +44,7 @@ public class XRServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 
-		// Search request attribute
-		Endpoint endpoint = (Endpoint) request.getAttribute(endpointKey);
-		if (endpoint == null) {
-			endpoint = (Endpoint) getServletContext().getAttribute(endpointKey);
-			if (endpoint == null) {
-				throw new ServletException("no Endpoint instance found named:" + endpointKey); //$NON-NLS-1$
-			}
-		}
+		Endpoint endpoint = getEndpoint(request);
 
 		MethodResponse result;
 		if (TEXT_XML.equals(request.getContentType())) {
@@ -81,6 +74,19 @@ public class XRServlet extends HttpServlet {
 		out.close();
 	}
 
+	protected Endpoint getEndpoint(HttpServletRequest request) throws ServletException {
+		// Search request attribute
+		Endpoint endpoint = (Endpoint) request.getAttribute(endpointKey);
+		if (endpoint == null) {
+			// Search servlet context attribute
+			endpoint = (Endpoint) getServletContext().getAttribute(endpointKey);
+			if (endpoint == null) {
+				throw new ServletException("no Endpoint instance found named:" + endpointKey); //$NON-NLS-1$
+			}
+		}
+		return endpoint;
+	}
+
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		long started = System.currentTimeMillis();
@@ -92,5 +98,5 @@ public class XRServlet extends HttpServlet {
 		}
 	}
 
-	private String endpointKey;
+	protected String endpointKey;
 }

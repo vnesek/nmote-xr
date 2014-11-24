@@ -85,6 +85,22 @@ Usage
 	</servlet>
 ```
 
+  You can also override XRServlet::getEndpoint() to expose service:
+
+```java
+		@Override
+		protected Endpoint getEndpoint(HttpServletRequest request) throws ServletException {
+			class Server {
+				@XRMethod
+				public String hello(Object s) {
+					return "Hello '" + s + "'";
+				}
+			}
+
+			return new ObjectEndpoint().export(new Server(), null);
+		}
+```
+
   (See the XRServlet.java source for more info)
 
 * Package `com.nmote.xr.spring` has support classes for exposing clients and
