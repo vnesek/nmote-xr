@@ -17,6 +17,8 @@ import java.io.InputStream;
  */
 public class LoggingInputStream extends FilterInputStream {
 
+	private final static String PREFIX = "<< ";
+
 	public LoggingInputStream(InputStream in, Appendable log) {
 		this(in, log, 16);
 	}
@@ -30,27 +32,6 @@ public class LoggingInputStream extends FilterInputStream {
 		support = new LoggingStreamSupport(log, PREFIX, size, dumpPlainText);
 	}
 
-	/**
-	 * @see java.io.InputStream#read()
-	 */
-	public synchronized int read() throws IOException {
-		int b = super.read();
-		if (b != -1) {
-			support.logByte(b);
-		} else {
-			closeSupport();
-		}
-
-		return b;
-	}
-
-	private void closeSupport() throws IOException {
-		if (support != null) {
-			support.close();
-			support = null;
-		}
-	}
-
 	public synchronized void close() throws IOException {
 		try {
 			closeSupport();
@@ -59,6 +40,39 @@ public class LoggingInputStream extends FilterInputStream {
 		}
 	}
 
-	private final static String PREFIX = "<< ";
+	/**
+	 * @see java.io.InputStream#read()
+	 */
+	public synchronized int read() throws IOException {
+		int r = super.read();
+		if (r != -1) {
+			support.logByte(r);
+		} else {
+			closeSupport();
+		}
+
+		return r;
+	}
+
+	@Override
+	public synchronized int read(byte[] b, int off, int len) throws IOException {
+		int r = super.read(b, off, len);
+		if (r != -1) {
+			for (int i = 0; i < r; ++i) {
+				support.logByte(b[off + i]);
+			}
+		} else {
+			closeSupport();
+		}
+
+		return r;
+	}
+
+	private void closeSupport() throws IOException {
+		if (support != null) {
+			support.close();
+			support = null;
+		}
+	}
 	private LoggingStreamSupport support;
 }

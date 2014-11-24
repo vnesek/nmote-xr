@@ -12,7 +12,7 @@ import java.io.IOException;
  * hex dump and plain text representation and periodically dumps it to a
  * supplied log.
  *
- * @author Vjekoslav Nesek vnesek@nmote.com
+ * @author Vjekoslav Nesek (vnesek@nmote.com)
  */
 class LoggingStreamSupport {
 
@@ -88,16 +88,17 @@ class LoggingStreamSupport {
 	}
 
 	private void logDumps(boolean flush) throws IOException {
-			log.append(prefix);
-			log.append(hexDump);
-			if (plainTextDump != null) {
-				log.append(" | ");
-				log.append(plainTextDump);
-			}
-			if (flush) {
-				log.append(" <flush>");
-			}
-			clear();
+		log.append(prefix);
+		log.append(hexDump);
+		if (plainTextDump != null) {
+			log.append(" | ");
+			log.append(plainTextDump);
+		}
+		log.append('\n');
+		if (flush) {
+			log.append(" <flush>");
+		}
+		clear();
 	}
 
 	private final Appendable log;

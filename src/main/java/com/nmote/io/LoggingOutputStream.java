@@ -54,7 +54,9 @@ public class LoggingOutputStream extends FilterOutputStream {
 	}
 
 	public synchronized void flush() throws IOException {
-		support.flush();
+		if (support != null) {
+			support.flush();
+		}
 		super.flush();
 	}
 
