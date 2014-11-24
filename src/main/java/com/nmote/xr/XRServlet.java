@@ -44,9 +44,13 @@ public class XRServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
 
-		Endpoint endpoint = (Endpoint) getServletContext().getAttribute(endpointKey);
+		// Search request attribute
+		Endpoint endpoint = (Endpoint) request.getAttribute(endpointKey);
 		if (endpoint == null) {
-			throw new ServletException("no Endpoint found in a servlet context with name:" + endpointKey); //$NON-NLS-1$
+			endpoint = (Endpoint) getServletContext().getAttribute(endpointKey);
+			if (endpoint == null) {
+				throw new ServletException("no Endpoint instance found named:" + endpointKey); //$NON-NLS-1$
+			}
 		}
 
 		MethodResponse result;

@@ -66,15 +66,32 @@ Usage
 	}
 ```
 
-* For production you will need to expose `com.nmote.xr.Endpoint` via one or  more 
-  `com.nmote.xr.XRServlet` instances. Endpoints are passed in a servlet context.
-  (See the source for more info)
-  
+* For production you will need to expose `com.nmote.xr.Endpoint` via one or  more
+  `com.nmote.xr.XRServlet` instances. Endpoint handling client's request is passed
+  in either as a servlet request attribute or a servlet context attribute named
+  'com.nmote.xr.Endpoint'. Attribute name can be configured through a servlet
+  parameter 'endpointKey'.
+
+  Add following snippet to web.xml:
+
+```xml
+  	<servlet>
+		<servlet-name>xml-rpc</servlet-name>
+		<servlet-class>com.nmote.xr.XRServlet</servlet-class>
+		<init-param>
+			<param-name>endpointKey</param-name>
+			<param-value>My-XMLR-RPC-Server-Name</param-value>
+		</init-param>
+	</servlet>
+```
+
+  (See the XRServlet.java source for more info)
+
 * Package `com.nmote.xr.spring` has support classes for exposing clients and
   server using springframework contexts.
-  
 
-Author contact and support
+
+Author Contact and Support
 --------------------------
 
 For further information please contact
