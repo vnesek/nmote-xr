@@ -5,7 +5,6 @@
 
 package com.nmote.xr;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -29,8 +28,8 @@ public class DefaultTypeConverter implements TypeConverter {
 		DefaultTypeConverter.INSTANCE = instance;
 	}
 
-	public Object toJavaObject(Object value, Type type, TypeConverter converter, Annotation... annotations)
-			throws InstantiationException, IllegalAccessException {
+	public Object toJavaObject(Object value, Type type, TypeConverter converter) throws InstantiationException,
+			IllegalAccessException {
 		if (value instanceof Collection) {
 			Type collectionType;
 			Type elementType;
@@ -70,8 +69,8 @@ public class DefaultTypeConverter implements TypeConverter {
 		return value;
 	}
 
-	public Object toXmlRpcValue(Object value, Type type, TypeConverter converter, Annotation... annotations)
-			throws InstantiationException, IllegalAccessException {
+	public Object toXmlRpcValue(Object value, Type type, TypeConverter converter) throws InstantiationException,
+			IllegalAccessException {
 		if (value instanceof Collection) {
 			Collection result = newCollection((Collection) value, ArrayList.class);
 			for (Object e : (Collection) value) {

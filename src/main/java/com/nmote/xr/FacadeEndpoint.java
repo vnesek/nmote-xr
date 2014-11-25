@@ -10,8 +10,24 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 
+/**
+ * Provides a factory for generating proxies implementing Java interfaces that
+ * make XML-RPC calls to a target Endpoint. Usually, target endpoint will be
+ * {@link HTTPClientEndpoint} allowing you to make normal Java method calls to
+ * remote XML-RPC services.
+ *
+ * @param <T>
+ *            java interface declaring one or more XML-RPC methods
+ */
 public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHandler {
 
+	/**
+	 * Returns an {@link FacadeEndpoint} instance that created proxy.
+	 *
+	 * @param proxy
+	 *            instance created by FacadeEndpoint
+	 * @return FacadeInterface that created proxy
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> FacadeEndpoint<T> getProxy(Object proxy) {
 		return (FacadeEndpoint<T>) Proxy.getInvocationHandler(proxy);
@@ -94,6 +110,11 @@ public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHan
 		return result;
 	}
 
+	/**
+	 * Creates an proxy implementing T and all passed additional interfaces.
+	 *
+	 * @return new proxy instance
+	 */
 	public T newProxy() {
 		Object proxy = Proxy.newProxyInstance(classLoader, exportInterfaces, this);
 		return clazz.cast(proxy);

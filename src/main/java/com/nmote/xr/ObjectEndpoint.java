@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -12,6 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Endpoint implementation that adapts an object instance. It is possible to
+ * export several object instance or static class methods through a single
+ * ObjectEndpoint.
+ */
 public class ObjectEndpoint implements Endpoint, Meta {
 
 	public MethodResponse call(MethodCall call) {
@@ -25,10 +30,26 @@ public class ObjectEndpoint implements Endpoint, Meta {
 		return response;
 	}
 
+	/**
+	 * Exports public static methods annotated by {@link XRMethod}.
+	 *
+	 * @param clazz
+	 *            to export methods from
+	 * @return this instance for call chaining.
+	 */
 	public <T> ObjectEndpoint export(Class<? super T> clazz) {
 		return export(null, clazz);
 	}
 
+	/**
+	 * Exports public methods annotated by {@link XRMethod} declared on a clazz.
+	 *
+	 * @param server
+	 *            object instance exposing XML-RPC methods
+	 * @param clazz
+	 *            to export methods from
+	 * @return this instance for call chaining.
+	 */
 	public <T> ObjectEndpoint export(T server, Class<?> clazz) {
 		// If clazz isn't specified than export all methods on a object
 		if (clazz == null) {
@@ -45,27 +66,48 @@ public class ObjectEndpoint implements Endpoint, Meta {
 			if (prefix != null) {
 				name = prefix + "." + name;
 			}
-			if (methods.containsKey(name)) { throw new IllegalArgumentException("methods " + m + " and "
-					+ methods.get(name) + " are exported as " + name); }
+			if (methods.containsKey(name)) {
+				throw new IllegalArgumentException("methods " + m + " and " + methods.get(name) + " are exported as "
+						+ name);
+			}
 			methods.put(name, method);
 		}
 
 		return this;
 	}
 
+	/**
+	 * Exports {@link Meta} (system.*) methods.
+	 *
+	 * @return this instance for call chaining.
+	 */
 	public ObjectEndpoint exportMeta() {
 		return export(this, Meta.class);
 	}
 
+	/**
+	 * Sets a {@link FaultMapper} to use by this Endpoint. To be used,
+	 * FaultMapper must be assigned prior to calling
+	 * {@link ObjectEndpoint#export(Object, Class)}.
+	 *
+	 * @param faultMapper
+	 * @return this instance for call chaining.
+	 * @throws NullPointerException
+	 *             if faultMapper is null
+	 */
 	public ObjectEndpoint faultMapper(FaultMapper faultMapper) {
-		if (faultMapper == null) { throw new NullPointerException("faultMapper == null"); }
+		if (faultMapper == null) {
+			throw new NullPointerException("faultMapper == null");
+		}
 		this.faultMapper = faultMapper;
 		return this;
 	}
 
 	public String help(String methodName) {
 		MethodEndpoint method = methods.get(methodName);
-		if (method == null) { throw Fault.newSystemFault(Fault.METHOD_NOT_SUPPORTED, methodName); }
+		if (method == null) {
+			throw Fault.newSystemFault(Fault.METHOD_NOT_SUPPORTED, methodName);
+		}
 		return method.help(methodName);
 	}
 
@@ -75,6 +117,15 @@ public class ObjectEndpoint implements Endpoint, Meta {
 		return result;
 	}
 
+	/**
+	 * Sets a prefix for all methods names exposed by this Endpoint. Prefix must
+	 * be assigned prior to calling {@link ObjectEndpoint#export(Object, Class)}
+	 * .
+	 *
+	 * @param prefix
+	 *            used to scope method names. Pass null to clear prefix.
+	 * @return this instance for call chaining.
+	 */
 	public ObjectEndpoint prefix(String prefix) {
 		this.prefix = prefix;
 		return this;
@@ -84,8 +135,21 @@ public class ObjectEndpoint implements Endpoint, Meta {
 		return methods.keySet().contains(methodName);
 	}
 
+	/**
+	 * Sets a {@link TypeConverter} to use by this Endpoint. To be used,
+	 * TypeConverter must be assigned prior to calling
+	 * {@link ObjectEndpoint#export(Object, Class)}.
+	 *
+	 * @param typeConverter
+	 * @return this instance for call chaining.
+	 * @throws NullPointerException
+	 *             if typeConverter is null
+	 */
+
 	public ObjectEndpoint typeConverter(TypeConverter typeConverter) {
-		if (typeConverter == null) { throw new NullPointerException("typeConverter == null"); }
+		if (typeConverter == null) {
+			throw new NullPointerException("typeConverter == null");
+		}
 		this.typeConverter = typeConverter;
 		return this;
 	}

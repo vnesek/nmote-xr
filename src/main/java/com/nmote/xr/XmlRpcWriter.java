@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -15,8 +15,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 class XmlRpcWriter extends FilterWriter {
 
 	/**

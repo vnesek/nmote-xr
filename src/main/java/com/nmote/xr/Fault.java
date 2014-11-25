@@ -12,7 +12,10 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+/**
+ * XML-RPC fault. Throwed by calls made on proxies ({@link FacadeEndpoint}).
+ */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class Fault extends RuntimeException {
 
 	public static final int CUSTOM_FAULT = 1000;

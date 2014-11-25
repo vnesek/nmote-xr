@@ -5,10 +5,22 @@
 
 package com.nmote.xr;
 
+/**
+ * DelegateEndpoint delegates method calls to the target Endpoint.
+ */
 public class DelegateEndpoint implements Endpoint {
 
+	/**
+	 * Creates delegate endpoint delegating XML-RPC calls to target
+	 *
+	 * @param target
+	 * @throws NullPointerException
+	 *             if target is null
+	 */
 	public DelegateEndpoint(Endpoint target) {
-		if (target == null) throw new NullPointerException("target is null");
+		if (target == null) {
+			throw new NullPointerException("target is null");
+		}
 		this.target = target;
 	}
 

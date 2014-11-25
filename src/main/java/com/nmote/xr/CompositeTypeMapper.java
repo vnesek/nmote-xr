@@ -5,7 +5,6 @@
 
 package com.nmote.xr;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,20 +20,20 @@ public class CompositeTypeMapper implements TypeConverter {
 		this(Arrays.asList(faultMappers));
 	}
 
-	public Object toJavaObject(Object value, Type type, TypeConverter converter, Annotation... annotations) throws InstantiationException, IllegalAccessException {
+	public Object toJavaObject(Object value, Type type, TypeConverter converter) throws InstantiationException, IllegalAccessException {
 		Object result = null;
 		for (TypeConverter typeConverter : typeConverters) {
-			result = typeConverter.toJavaObject(value, type, converter, annotations);
+			result = typeConverter.toJavaObject(value, type, converter);
 			if (result != null) break;
 		}
 		return result;
 	}
 
-	public Object toXmlRpcValue(Object object, Type type, TypeConverter converter, Annotation... annotations)
+	public Object toXmlRpcValue(Object object, Type type, TypeConverter converter)
 			throws InstantiationException, IllegalAccessException {
 		Object result = null;
 		for (TypeConverter typeConverter : typeConverters) {
-			result = typeConverter.toXmlRpcValue(object, type, converter, annotations);
+			result = typeConverter.toXmlRpcValue(object, type, converter);
 			if (result != null) break;
 		}
 		return result;
