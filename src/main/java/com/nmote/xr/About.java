@@ -13,7 +13,7 @@ public final class About implements Serializable {
 
 	public static final String COPYRIGHT = "Copyright (c) 2005-2014, Nmote ltd., All rights reserved";
 	public static final String NAME = "nmote-xr";
-	public static final String VERSION = "2.1.0.Beta";
+	public static final String VERSION = "2.1.0";
 
 	private About() {}
 
