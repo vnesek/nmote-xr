@@ -37,7 +37,7 @@ public class ObjectEndpoint implements Endpoint, Meta {
 	 *            to export methods from
 	 * @return this instance for call chaining.
 	 */
-	public <T> ObjectEndpoint export(Class<? super T> clazz) {
+	public ObjectEndpoint export(Class<?> clazz) {
 		return export(null, clazz);
 	}
 
@@ -50,7 +50,7 @@ public class ObjectEndpoint implements Endpoint, Meta {
 	 *            to export methods from
 	 * @return this instance for call chaining.
 	 */
-	public <T> ObjectEndpoint export(T server, Class<?> clazz) {
+	public ObjectEndpoint export(Object server, Class<?> clazz) {
 		// If clazz isn't specified than export all methods on a object
 		if (clazz == null) {
 			clazz = (Class<?>) server.getClass();
@@ -91,6 +91,7 @@ public class ObjectEndpoint implements Endpoint, Meta {
 	 * {@link ObjectEndpoint#export(Object, Class)}.
 	 *
 	 * @param faultMapper
+	 *            for {@link Fault} conversion.
 	 * @return this instance for call chaining.
 	 * @throws NullPointerException
 	 *             if faultMapper is null
@@ -141,11 +142,11 @@ public class ObjectEndpoint implements Endpoint, Meta {
 	 * {@link ObjectEndpoint#export(Object, Class)}.
 	 *
 	 * @param typeConverter
+	 *            to convert method parameter and result value conversions
 	 * @return this instance for call chaining.
 	 * @throws NullPointerException
 	 *             if typeConverter is null
 	 */
-
 	public ObjectEndpoint typeConverter(TypeConverter typeConverter) {
 		if (typeConverter == null) {
 			throw new NullPointerException("typeConverter == null");

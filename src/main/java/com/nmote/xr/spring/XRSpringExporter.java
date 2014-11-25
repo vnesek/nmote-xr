@@ -56,7 +56,8 @@ public class XRSpringExporter implements ServletContextAware, DisposableBean {
 		this.servletContext = servletContext;
 
 		ObjectEndpoint endpoint = new ObjectEndpoint();
-		for (@SuppressWarnings("rawtypes") XRExportDef e : servers) {
+		for (@SuppressWarnings("rawtypes")
+		XRExportDef e : servers) {
 			endpoint.prefix(e.getPrefix());
 			endpoint.faultMapper(e.getFaultMapper() != null ? e.getFaultMapper() : faultMapper);
 			endpoint.typeConverter(typeConverter);
@@ -82,7 +83,8 @@ public class XRSpringExporter implements ServletContextAware, DisposableBean {
 	 * Give subclass a chance to modify endpoint prior to export.
 	 *
 	 * @param endpoint
-	 * @return
+	 *            to prepare
+	 * @return modified endpoint to export
 	 */
 	protected Endpoint prepare(ObjectEndpoint endpoint) {
 		Endpoint result = endpoint;

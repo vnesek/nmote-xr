@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -13,14 +13,11 @@ import java.io.InputStream;
  * LengthLimitedInputStream can be used to limit a number of bytes that can be
  * read from wrapped stream. When LengthLimitedInputStream is closed it skips to
  * a limit.
- * 
+ *
  * @author Vjekoslav Nesek vnesek@nmote.com
  */
 public class LengthLimitedInputStream extends FilterInputStream {
 
-	/**
-	 * @param in
-	 */
 	public LengthLimitedInputStream(InputStream in, int length) {
 		super(in);
 		if (length < 0) { throw new IllegalArgumentException("Length less than 0"); }
@@ -41,7 +38,7 @@ public class LengthLimitedInputStream extends FilterInputStream {
 	/**
 	 * Skips to the limit if there are any bytes are left. Original stream
 	 * remains open.
-	 * 
+	 *
 	 * @see java.io.InputStream#close()
 	 */
 	public void close() throws IOException {
@@ -57,7 +54,7 @@ public class LengthLimitedInputStream extends FilterInputStream {
 
 	/**
 	 * Returns a number of bytes left until a limit.
-	 * 
+	 *
 	 * @return number of bytes left until a limit
 	 */
 	public int getBytesLeft() {

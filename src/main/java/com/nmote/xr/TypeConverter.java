@@ -23,7 +23,9 @@ public interface TypeConverter {
 	 *            to use for additional recursive conversions
 	 * @return converted value or null if converter doesn't support conversion
 	 * @throws InstantiationException
+	 *             if instance can't be created
 	 * @throws IllegalAccessException
+	 *             if type converter can't access class constructor
 	 */
 	Object toXmlRpcValue(Object object, Type type, TypeConverter converter) throws InstantiationException,
 			IllegalAccessException;
@@ -31,7 +33,7 @@ public interface TypeConverter {
 	/**
 	 * Converts an XML-RPC value to a Java object.
 	 *
-	 * @param object
+	 * @param value
 	 *            an XML-RPC value supported by this TypeConverter
 	 * @param type
 	 *            Java object to convert to
@@ -39,7 +41,9 @@ public interface TypeConverter {
 	 *            to use for additional recursive conversions
 	 * @return converted value or null if converter doesn't support conversion
 	 * @throws InstantiationException
+	 *             if instance can't be created
 	 * @throws IllegalAccessException
+	 *             if type converter can't access class constructor
 	 */
 	Object toJavaObject(Object value, Type type, TypeConverter converter) throws InstantiationException,
 			IllegalAccessException;

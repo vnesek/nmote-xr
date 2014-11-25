@@ -28,9 +28,8 @@ public class FacadeEndpoint<T> extends DelegateEndpoint implements InvocationHan
 	 *            instance created by FacadeEndpoint
 	 * @return FacadeInterface that created proxy
 	 */
-	@SuppressWarnings("unchecked")
-	public static <T> FacadeEndpoint<T> getProxy(Object proxy) {
-		return (FacadeEndpoint<T>) Proxy.getInvocationHandler(proxy);
+	public static FacadeEndpoint<?> getProxy(Object proxy) {
+		return (FacadeEndpoint<?>) Proxy.getInvocationHandler(proxy);
 	}
 
 	private static int countXRMethods(Class<?>... interfaces) {

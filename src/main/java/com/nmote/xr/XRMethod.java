@@ -27,8 +27,15 @@ public @interface XRMethod {
 	/**
 	 * XML-RPC method name. If ommited Java method name will be used as XML-RPC
 	 * method name.
+	 *
+	 * @return XML-RPC method name
 	 */
 	String value() default METHOD_NAME;
 
+	/**
+	 * Help/usage description of method. Exposed via {@link Meta} interface.
+	 *
+	 * @return help/usage description of method
+	 */
 	String help() default "";
 }

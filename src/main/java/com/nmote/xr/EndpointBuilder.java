@@ -28,16 +28,22 @@ import com.nmote.nanohttp.NanoServer;
  * <p>
  * Call static methods client() or server() on start building endpoint or proxy.
  * </p>
+ *
+ * @param <T>
+ *            proxy interface
  */
 public class EndpointBuilder<T> {
 
 	/**
-	 * Creates an proxy for a remote XML-RPC service located at uri
+	 * Creates an proxy for a remote XML-RPC service located at <code>uri</code>
+	 * . Call get() to obtain instance.
 	 *
 	 * @param uri
 	 *            URL to a remote XML-RPC service
 	 * @param clazz
 	 *            declaring remote XML-RPC methods
+	 * @param <T>
+	 *            proxy interface
 	 * @return proxy to access XML-RPC service
 	 * @throws URISyntaxException
 	 *             if uri is mallformated.
@@ -47,13 +53,15 @@ public class EndpointBuilder<T> {
 	}
 
 	/**
-	 * Builds an proxy for a remote XML-RPC service located at uri. Call get()
-	 * to obtain instance.
+	 * Builds an proxy for a remote XML-RPC service located at <code>uri</code>.
+	 * Call get() to obtain instance.
 	 *
 	 * @param uri
 	 *            URL to a remote XML-RPC service
 	 * @param clazz
 	 *            declaring remote XML-RPC methods
+	 * @param <T>
+	 *            proxy interface
 	 * @return proxy to access XML-RPC service
 	 */
 	public static <T> EndpointBuilder<T> client(URI uri, Class<T> clazz) {
@@ -83,6 +91,7 @@ public class EndpointBuilder<T> {
 	 * Dump XML-RPC calls to log.
 	 *
 	 * @param log
+	 *            appender instance to log calls to
 	 * @return this for method chaining
 	 */
 	public EndpointBuilder<T> debug(Appendable log) {
@@ -91,10 +100,11 @@ public class EndpointBuilder<T> {
 	}
 
 	/**
-	 * Adds classes to a list of additional interfaces implemeted by an XML-RPC
-	 * server.
+	 * Adds classes to a list of additional interfaces implemented by an XML-RPC
+	 * server. Interface methods should be annotated by {@link XRMethod}.
 	 *
 	 * @param additional
+	 *            interfaces implemented by XML-RPC server
 	 * @return this for method chaining
 	 */
 	public EndpointBuilder<T> export(Class<?>... additional) {
@@ -103,10 +113,11 @@ public class EndpointBuilder<T> {
 	}
 
 	/**
-	 * Adds system.* calls (see {@see Meta}) to a list of methods implemeted by
-	 * an XML-RPC server.
+	 * Adds system.* calls to a list of methods implemeted by an XML-RPC server.
+	 * Interface methods should be annotated by {@link XRMethod}.
 	 *
-	 * @param additional
+	 * @see Meta
+	 *
 	 * @return this for method chaining
 	 */
 	public EndpointBuilder<T> exportMeta() {
@@ -116,9 +127,15 @@ public class EndpointBuilder<T> {
 
 	/**
 	 * Builds an XML-PRC server that can be exposed via {@link NanoServer}.
+	 * Methods declared by <code>clazz</code> should be annotated by
+	 * {@link XRMethod}.
 	 *
 	 * @param server
+	 *            Java object implementing service
 	 * @param clazz
+	 *            declaring XML-RPC methods
+	 * @param <Z>
+	 *            server type
 	 * @return HTTP server endpoint
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -128,12 +145,15 @@ public class EndpointBuilder<T> {
 
 	/**
 	 * Builds an XML-PRC server that can be exposed via {@link NanoServer}.
+	 * Public static methods declared by <code>clazz</code> should be annotated
+	 * by {@link XRMethod}.
 	 *
 	 * @param clazz
+	 *            declaring XML-RPC methods
 	 * @return HTTP server endpoint
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public <Z> EndpointBuilder<HTTPServerEndpoint> server(Class<Z> clazz) {
+	public EndpointBuilder<HTTPServerEndpoint> server(Class<?> clazz) {
 		return new EndpointBuilder(null, clazz);
 	}
 
@@ -221,17 +241,34 @@ public class EndpointBuilder<T> {
 	 * Use classLoader for creating proxies.
 	 *
 	 * @param classLoader
-	 * @return
+	 *            for creating proxies
+	 * @return this for method chaining
 	 */
 	public EndpointBuilder<T> using(ClassLoader classLoader) {
 		this.classLoader = classLoader;
 		return this;
 	}
 
+	/**
+	 * Use faultMapper for creating proxies.
+	 *
+	 * @param faultMapper
+	 *            for {@link Fault} conversion
+	 * @return this for method chaining
+	 */
 	public EndpointBuilder<T> using(FaultMapper faultMapper) {
 		this.faultMapper = faultMapper;
 		return this;
 	}
+
+	/**
+	 * Use typeConverter for parameter conversions between Java and XML-RPC
+	 * values.
+	 *
+	 * @param typeConverter
+	 *            to convert method parameter and result value conversions
+	 * @return this for method chaining
+	 */
 
 	public EndpointBuilder<T> using(TypeConverter typeConverter) {
 		this.typeConverter = typeConverter;

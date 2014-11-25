@@ -14,6 +14,7 @@ public class DelegateEndpoint implements Endpoint {
 	 * Creates delegate endpoint delegating XML-RPC calls to target
 	 *
 	 * @param target
+	 *            Endpoint to delegate calls to
 	 * @throws NullPointerException
 	 *             if target is null
 	 */
