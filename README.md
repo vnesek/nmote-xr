@@ -13,6 +13,25 @@ Features
 * Server and client support
 * BSD style license
 
+
+Add to Your's Project
+---------------------
+
+If you use maven for dependency management, add following snippet to pom.xml:
+
+```xml
+	<dependencies>
+		...
+
+		<dependency>
+			<groupId>com.nmote.xr</groupId>
+			<artifactId>nmote-xr</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+	</dependencies>
+```
+
 Building
 --------
 To produce nmote-xr.jar you will need apache maven installed. Run:
