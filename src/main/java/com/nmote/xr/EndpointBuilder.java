@@ -5,11 +5,6 @@
 
 package com.nmote.xr;
 
-import java.io.FilterInputStream;
-import java.io.FilterOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -17,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.nmote.nanohttp.NanoServer;
+import com.nmote.xr.log.LoggerAdapter;
 
 /**
  * <p>
@@ -84,18 +80,18 @@ public class EndpointBuilder<T> {
 	 * @return this for method chaining
 	 */
 	public EndpointBuilder<T> debug() {
-		return debug(System.err);
+		return debug(LoggerAdapter.SYSTEM_ERR);
 	}
 
 	/**
 	 * Dump XML-RPC calls to log.
 	 *
-	 * @param log
-	 *            appender instance to log calls to
+	 * @param logger
+	 *            logger adapter instance to log calls to
 	 * @return this for method chaining
 	 */
-	public EndpointBuilder<T> debug(Appendable log) {
-		this.log = log;
+	public EndpointBuilder<T> debug(LoggerAdapter logger) {
+		this.logger = logger;
 		return this;
 	}
 
@@ -157,6 +153,26 @@ public class EndpointBuilder<T> {
 		return new EndpointBuilder(null, clazz);
 	}
 
+	private static class LoggerEndpoint implements Endpoint {
+
+		LoggerEndpoint(Endpoint delegate, LoggerAdapter logger) {
+			this.delegate = delegate;
+			this.logger = logger;
+		}
+
+
+		private final Endpoint delegate;
+		private final LoggerAdapter logger;
+		public MethodResponse call(MethodCall call) {
+			call.setAttribute(LoggerAdapter.LOGGER_KEY, logger);
+			try {
+			return delegate.call(call);
+			} finally {
+				call.setAttribute(LoggerAdapter.LOGGER_KEY, null);
+			}
+		}
+	}
+
 	/**
 	 * Returns either a client proxy or {@link HTTPServerEndpoint} instance.
 	 *
@@ -166,63 +182,20 @@ public class EndpointBuilder<T> {
 	public T get() {
 		T result;
 
-		if (uri == null) {
+		if (uri != null) {
 			if (classLoader == null) {
 				classLoader = clazz.getClassLoader();
 			}
 
-			Endpoint clientEndpoint;
-			if (log != null) {
-				clientEndpoint = new HTTPClientEndpoint(uri) {
-					protected InputStream createInputStream(MethodCall call) throws IOException {
-						log.append("\n--- method response ---\n");
-						return new FilterInputStream(super.createInputStream(call)) {
-							public void close() throws IOException {
-								log.append("\n--- end response ---\n");
-								super.close();
-							}
-
-							public int read() throws IOException {
-								int r = super.read();
-								if (r != -1) {
-									log.append((char) r);
-								}
-
-								return r;
-							}
-
-							public int read(byte[] b, int off, int len) throws IOException {
-								int r = super.read(b, off, len);
-								if (r != -1) {
-									log.append(new String(b, off, r, "UTF-8"));
-								}
-								return r;
-							}
-						};
-					};
-
-					protected OutputStream createOutputStream(MethodCall call) throws IOException {
-						log.append("\n--- method call ---\n");
-						return new FilterOutputStream(super.createOutputStream(call)) {
-							public void close() throws IOException {
-								log.append("\n--- end call ---\n");
-								super.close();
-							}
-
-							public void write(int b) throws IOException {
-								log.append((char) b);
-								super.write(b);
-							}
-						};
-					}
-				};
-			} else {
-				clientEndpoint = new HTTPClientEndpoint(uri);
+			Endpoint clientEndpoint = new HTTPClientEndpoint(uri);
+			if (logger != null) {
+				clientEndpoint = new LoggerEndpoint(clientEndpoint, logger);
 			}
 
 			result = new FacadeEndpoint<T>(clientEndpoint, //
 					classLoader, clazz, typeConverter, //
-					additionalInterfaces.toArray(new Class<?>[additionalInterfaces.size()])).newProxy();
+					additionalInterfaces.toArray(new Class<?>[additionalInterfaces.size()])) //
+					.newProxy();
 		} else {
 			ObjectEndpoint endpoint = new ObjectEndpoint();
 			endpoint.faultMapper(faultMapper);
@@ -281,6 +254,6 @@ public class EndpointBuilder<T> {
 	private List<Class<?>> additionalInterfaces = new ArrayList<Class<?>>();
 	private ClassLoader classLoader;
 	private FaultMapper faultMapper = DefaultFaultMapper.getInstance();
-	private Appendable log;
+	private LoggerAdapter logger = LoggerAdapter.SYSTEM_ERR;
 	private TypeConverter typeConverter = DefaultTypeConverter.getInstance();
 }

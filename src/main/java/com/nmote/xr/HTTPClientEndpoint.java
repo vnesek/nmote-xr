@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2015. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
+
+import com.nmote.xr.log.LoggerAdapter;
 
 public class HTTPClientEndpoint extends AbstractIOEndPoint {
 
@@ -26,6 +28,10 @@ public class HTTPClientEndpoint extends AbstractIOEndPoint {
 
 	@Override
 	public MethodResponse call(MethodCall call) {
+		final LoggerAdapter logger = (LoggerAdapter) call.getAttribute(LoggerAdapter.LOGGER_KEY);
+		if (logger != null) {
+			logger.debug("-- " + call.getMethodName() + " (" + uri + ") --");
+		}
 		try {
 			HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
 
@@ -68,6 +74,6 @@ public class HTTPClientEndpoint extends AbstractIOEndPoint {
 	protected OutputStream createOutputStream(MethodCall call) throws IOException {
 		return getConnection(call).getOutputStream();
 	}
-	
+
 	private URI uri;
 }
