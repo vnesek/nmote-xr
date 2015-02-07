@@ -26,7 +26,7 @@ If you use maven for dependency management, add following snippet to pom.xml:
 		<dependency>
 			<groupId>com.nmote.xr</groupId>
 			<artifactId>nmote-xr</artifactId>
-			<version>2.1.0</version>
+			<version>2.2.0</version>
 		</dependency>
 
 	</dependencies>
@@ -84,6 +84,19 @@ Usage
 		server.start();
 	}
 ```
+
+* You can trace XML-RPC calls through LoggerAdapter. Configuration is made through
+  EndpointBuilder::debug builder method
+
+```java
+		String url = "http://www.cookcomputing.com/xmlrpcsamples/math.rem";
+		Math m = EndpointBuilder.client(url, Math.class).debug().get();
+		System.out.println(m.add(2, 3));
+```
+
+To use your's logging framework of choice instead of System.err, implement
+com.nmote.xr.log.LoggerAdapter interface.
+
 
 * For production you will need to expose `com.nmote.xr.Endpoint` via one or  more
   `com.nmote.xr.XRServlet` instances. Endpoint handling client's request is passed

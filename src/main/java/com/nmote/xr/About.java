@@ -9,11 +9,11 @@ import java.io.Serializable;
 
 public final class About implements Serializable {
 
-	public static final long serialVersionUID = 210L;
+	public static final long serialVersionUID = 220L;
 
-	public static final String COPYRIGHT = "Copyright (c) 2005-2014, Nmote ltd., All rights reserved";
+	public static final String COPYRIGHT = "Copyright (c) 2005-2015, Nmote ltd., All rights reserved";
 	public static final String NAME = "nmote-xr";
-	public static final String VERSION = "2.1.0";
+	public static final String VERSION = "2.2.0";
 
 	private About() {}
 
