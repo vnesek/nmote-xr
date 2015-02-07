@@ -254,6 +254,6 @@ public class EndpointBuilder<T> {
 	private List<Class<?>> additionalInterfaces = new ArrayList<Class<?>>();
 	private ClassLoader classLoader;
 	private FaultMapper faultMapper = DefaultFaultMapper.getInstance();
-	private LoggerAdapter logger = LoggerAdapter.SYSTEM_ERR;
+	private LoggerAdapter logger;
 	private TypeConverter typeConverter = DefaultTypeConverter.getInstance();
 }
