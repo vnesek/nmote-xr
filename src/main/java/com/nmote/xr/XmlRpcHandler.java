@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved. 
+ * Copyright (c) Nmote Ltd. 2003-2014. All rights reserved.
  * See LICENSE doc in a root of project folder for additional information.
  */
 
@@ -29,8 +29,20 @@ import org.xml.sax.helpers.DefaultHandler;
  * XML XmlRpcHandler parses XmlRpc method calls and responses.
  */
 // @PMD:REVIEWED:CyclomaticComplexity: by vjeko on 2005.12.28 01:28
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 class XmlRpcHandler extends DefaultHandler {
+
+	/**
+	 * Marker object for uninitialized response values.
+	 */
+	private static final Object UNDEFINED_RESPONSE_VALUE = new String("<response>");
+
+	/**
+	 * Marker class for multiple &lt;param&gt;s in response.
+	 */
+	private static final class ComplexResponse extends ArrayList<Object> {
+		private static final long serialVersionUID = About.serialVersionUID;
+	};
 
 	public XmlRpcHandler() {
 		super();
@@ -58,7 +70,9 @@ class XmlRpcHandler extends DefaultHandler {
 	 */
 	@Override
 	public void endDocument() throws SAXException {
-		if (!stack.isEmpty()) { throw new SAXException("stack isn't empty: " + stack); }
+		if (!stack.isEmpty()) {
+			throw new SAXException("stack isn't empty: " + stack);
+		}
 		text.setLength(0);
 	}
 
@@ -243,7 +257,17 @@ class XmlRpcHandler extends DefaultHandler {
 		} else if (obj instanceof MethodCall) {
 			((MethodCall) obj).getParams().add(value);
 		} else if (obj instanceof MethodResponse) {
-			((MethodResponse) obj).setValue(value);
+			MethodResponse response = ((MethodResponse) obj);
+			Object responseValue = response.getValue();
+			if (responseValue == UNDEFINED_RESPONSE_VALUE) {
+				response.setValue(value);
+			} else if (responseValue instanceof ComplexResponse) {
+				((ComplexResponse) responseValue).add(value);
+			} else {
+				ComplexResponse cr = new ComplexResponse();
+				cr.add(responseValue);
+				response.setValue(cr);
+			}
 		} else if (obj instanceof Fault) {
 			((Fault) obj).setValue((Map) value);
 		}
@@ -302,7 +326,7 @@ class XmlRpcHandler extends DefaultHandler {
 	}
 
 	private void startMethodResponse() {
-		pushValue(new MethodResponse(null));
+		pushValue(new MethodResponse(UNDEFINED_RESPONSE_VALUE));
 	}
 
 	private void startName() {
