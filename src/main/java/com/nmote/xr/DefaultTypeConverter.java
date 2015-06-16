@@ -104,13 +104,13 @@ public class DefaultTypeConverter implements TypeConverter {
 		int size = prototype.size();
 		Collection result;
 		if (prototype instanceof Set) {
-			if (type instanceof Class && Set.class.isAssignableFrom((Class<?>) type)) {
+			if (type instanceof Class && Set.class.isAssignableFrom((Class<?>) type) && !type.equals(Set.class)) {
 				result = (Collection) ((Class<?>) type).newInstance();
 			} else {
 				result = new LinkedHashSet(size);
 			}
 		} else {
-			if (type instanceof Class && List.class.isAssignableFrom((Class<?>) type)) {
+			if (type instanceof Class && List.class.isAssignableFrom((Class<?>) type) && !type.equals(List.class)) {
 				result = (Collection) ((Class<?>) type).newInstance();
 			} else {
 				result = new ArrayList(size);
@@ -121,7 +121,7 @@ public class DefaultTypeConverter implements TypeConverter {
 
 	protected Map newMap(Map prototype, Type type) throws InstantiationException, IllegalAccessException {
 		Map result;
-		if (type instanceof Class && Map.class.isAssignableFrom((Class<?>) type)) {
+		if (type instanceof Class && Map.class.isAssignableFrom((Class<?>) type) && !type.equals(Map.class)) {
 			result = (Map) ((Class<?>) type).newInstance();
 		} else {
 			result = new LinkedHashMap(prototype.size());
